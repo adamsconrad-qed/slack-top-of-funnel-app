@@ -10,22 +10,25 @@ def generate_company_description(bio, investors):
     company_name = bio["companyName"]["formalName"]
     description = bio["description"]
     year_founded = bio["yearFounded"]
-    hq_location = f"{bio['hqLocation']['city']}, {bio['hqLocation']['stateProvince']}, {bio['hqLocation']['country']}"
+    hq_location = f"{bio['hqLocation']['city']}"
     employees = bio["employees"]
     total_money_raised = bio["totalMoneyRaised"]["amount"]
+    financingStatusNote = bio["financingStatusNote"]["note"]
+    financingAsOf = bio['financingStatusNote']["asOfDate"]
     
     investor_text = ", ".join(investors[:5])
     if len(investors) > 5:
         investor_text += f", and {len(investors) - 5} more"
 
     return f"""
-{company_name} is a company founded in {year_founded} and headquartered in {hq_location}. 
+{company_name} is a company founded in {year_founded} and headquartered in {hq_location}.
 Description: {description}
 
 Key Facts:
 - Employees: {employees}
 - Total Money Raised: ${total_money_raised:,.2f}
 - Notable Investors: {investor_text}
+- Financing (Updated {financingAsOf}): {financingStatusNote}
 """
 
 @app.event("message")
