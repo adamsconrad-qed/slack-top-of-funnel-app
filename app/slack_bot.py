@@ -42,7 +42,7 @@ def handle_message_events(body, say):
     user = event["user"]
     text = event.get("text", "")
     
-    logger.info(f"Processing message from user {user}: {text[:50]}...")  
+    logger.info(f"Processing message from user {user}: {text[:50]}...")  # Log first 50 chars of message
 
     if event.get("bot_id") and event.get("username") != "Top of Funnel Bot":
         logger.info(f"Ignoring message from bot: {event.get('username', 'Unknown bot')}")
@@ -50,7 +50,7 @@ def handle_message_events(body, say):
 
     domain = extract_domain(text)
     if not domain:
-        logger.info("No domain found in message")
+        logger.info("No valid domain found in message")
         return
 
     logger.info(f"Extracted domain: {domain}")
@@ -59,7 +59,7 @@ def handle_message_events(body, say):
     if not company_id:
         logger.info(f"No PitchBook data found for domain: {domain}")
         say(
-            text="No PitchBook data available for this company.",
+            text=f"No PitchBook data available for the company with domain: {domain}",
             thread_ts=event["ts"]
         )
         return
