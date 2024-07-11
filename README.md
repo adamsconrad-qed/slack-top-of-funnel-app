@@ -2,30 +2,26 @@ Overview
 Our Slack bot listens for messages in a specific channel, extracts website domains from these messages, and provides information about the companies associated with these domains using the PitchBook API.
 Making Changes
 You can make changes to the bot's behavior and responses directly through the GitHub website. Here's how:
-1. Accessing the Code
 
-Go to our GitHub repository: [Insert your GitHub repository URL here]
-Log in to your GitHub account if you haven't already.
-
-2. Navigating to the File
+1. Navigating to the File
 
 In the repository, you'll see a list of files and folders.
 Click on the app folder.
 Then click on the slack_bot.py file. This is where most of the bot's logic and responses are defined.
 
-3. Editing the File
+2. Editing the File
 
 Once you're viewing the slack_bot.py file, click the pencil icon (🖊️) in the top right corner of the file view to edit the file.
 You'll now be in edit mode and can make changes to the file.
 
-4. Modifying Bot Responses
+3. Modifying Bot Responses
 To change the bot's responses, look for the say() function calls. These are where the bot sends messages. For example:
 pythonCopysay(
     text="No PitchBook data available for this company.",
     thread_ts=event["ts"]
 )
 You can modify the text within the quotes to change what the bot says.
-5. Committing Your Changes
+4. Committing Your Changes
 
 After making your changes, scroll to the bottom of the page.
 You'll see a "Commit changes" section.
@@ -34,7 +30,7 @@ Optionally, you can add a more detailed description in the second box.
 Ensure "Commit directly to the main branch" is selected.
 Click the green "Commit changes" button.
 
-6. Automatic Deployment
+5. Automatic Deployment
 After you commit your changes:
 
 GitHub will automatically trigger a deployment to Heroku.
