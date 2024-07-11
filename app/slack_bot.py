@@ -2,7 +2,8 @@ from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from app.config import SLACK_BOT_TOKEN, SLACK_APP_TOKEN, SLACK_CHANNEL_ID
 from app.utils import extract_domain
-from app.pitchbook_api import search_company, search_investors, get_company_bio
+from app.pitchbook_api import search_company, search_investors, get_company_bio, get_vc_exit_predictions
+from app.logger import logger
 
 app = App(token=SLACK_BOT_TOKEN)
 
@@ -29,46 +30,65 @@ Key Facts:
 """
 
 @app.event("message")
-def handle_message_events(body, logger):
+def handle_message_events(body, say):
     event = body["event"]
     channel_id = event["channel"]
     
+    logger.info(f"Received message event in channel {channel_id}")
+    
     if channel_id != SLACK_CHANNEL_ID:
+        logger.info(f"Ignoring message from channel {channel_id} - not the target channel")
         return
+
     user = event["user"]
     text = event.get("text", "")
     
+    logger.info(f"Processing message from user {user}: {text[:50]}...")  
+
     if event.get("bot_id") and event.get("username") != "Top of Funnel Bot":
+        logger.info(f"Ignoring message from bot: {event.get('username', 'Unknown bot')}")
         return
 
     domain = extract_domain(text)
     if not domain:
+        logger.info("No domain found in message")
         return
+
+    logger.info(f"Extracted domain: {domain}")
 
     company_id = search_company(domain)
     if not company_id:
-        app.client.chat_postMessage(
-            channel=channel_id,
-            thread_ts=event["ts"],
-            text="No PitchBook data available for this company."
+        logger.info(f"No PitchBook data found for domain: {domain}")
+        say(
+            text="No PitchBook data available for this company.",
+            thread_ts=event["ts"]
         )
         return
+
+    logger.info(f"Found company ID: {company_id}")
 
     bio = get_company_bio(company_id)
     investors = search_investors(company_id)
 
     if not bio:
-        app.client.chat_postMessage(
-            channel=channel_id,
-            thread_ts=event["ts"],
-            text="Unable to retrieve company information from PitchBook."
+        logger.warning(f"Unable to retrieve company bio for company ID: {company_id}")
+        say(
+            text="Unable to retrieve company information from PitchBook.",
+            thread_ts=event["ts"]
         )
         return
 
+    logger.info(f"Retrieved bio and {len(investors)} investors for company ID: {company_id}")
+
     description = generate_company_description(bio, investors)
 
-    app.client.chat_postMessage(
-        channel=channel_id,
-        thread_ts=event["ts"],
-        text=description
+    say(
+        text=description,
+        thread_ts=event["ts"]
     )
+    logger.info(f"Posted company description for {bio['companyName']['formalName']}")
+
+@app.error
+def global_error_handler(error, body, logger):
+    logger.exception(f"Error: {error}")
+    logger.error(f"Request body: {body}")
