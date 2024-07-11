@@ -1,8 +1,7 @@
 from slack_bolt import App
-from slack_bolt.adapter.socket_mode import SocketModeHandler
-from app.config import SLACK_BOT_TOKEN, SLACK_APP_TOKEN, SLACK_CHANNEL_ID
+from app.config import SLACK_BOT_TOKEN, SLACK_CHANNEL_ID
 from app.utils import extract_domain
-from app.pitchbook_api import search_company, search_investors, get_company_bio, get_vc_exit_predictions
+from app.pitchbook_api import search_company, search_investors, get_company_bio
 from app.logger import logger
 
 app = App(token=SLACK_BOT_TOKEN)
