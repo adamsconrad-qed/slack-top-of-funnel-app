@@ -4,7 +4,7 @@ from app.config import PITCHBOOK_API_TOKEN, PITCHBOOK_API_BASE_URL, PITCHBOOK_AP
 PITCHBOOK_HEADERS = {"Authorization": f"PB-Token {PITCHBOOK_API_TOKEN}"}
 
 def search_company(domain):
-    url = f"{PITCHBOOK_API_BASE_URL}/companies/search"
+    url = f"{PITCHBOOK_API_BASE_URL}companies/search"
     params = {"companyNames": domain}
     response = requests.get(url, headers=PITCHBOOK_HEADERS, params=params)
     if response.status_code == 200:
@@ -14,7 +14,7 @@ def search_company(domain):
     return None
 
 def search_investors(company_id):
-    url = f"{PITCHBOOK_API_BASE_URL}/investors/search"
+    url = f"{PITCHBOOK_API_BASE_URL}investors/search"
     params = {"companyNames": company_id}
     response = requests.get(url, headers=PITCHBOOK_HEADERS, params=params)
     if response.status_code == 200:
@@ -23,7 +23,7 @@ def search_investors(company_id):
     return []
 
 def get_company_bio(company_id):
-    url = f"{PITCHBOOK_API_BASE_URL_V2}/companies/{company_id}/bio"
+    url = f"{PITCHBOOK_API_BASE_URL_V2}companies/{company_id}/bio"
     response = requests.get(url, headers=PITCHBOOK_HEADERS)
     if response.status_code == 200:
         return response.json()
