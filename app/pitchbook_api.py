@@ -25,6 +25,7 @@ def search_investors(company_id):
 def get_company_bio(company_id):
     url = f"{PITCHBOOK_API_BASE_URL_V2}companies/{company_id}/bio"
     response = requests.get(url, headers=PITCHBOOK_HEADERS)
+    print(response.json())
     if response.status_code == 200:
         return response.json()
     return None
