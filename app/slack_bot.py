@@ -33,8 +33,8 @@ Key Facts:
 
 @app.event("message")
 def handle_message_events(body, say):
-    event = body["event"]
-    channel_id = event["channel"]
+    event = body['event']
+    channel_id = event['channel']
     
     logger.info(f"Received message event in channel {channel_id}")
     
@@ -42,8 +42,8 @@ def handle_message_events(body, say):
         logger.info(f"Ignoring message from channel {channel_id} - not the target channel")
         return
 
-    user = event["message"]["user"]
-    text = event["message"]["text"]
+    user = event['user']
+    text = event['text']
     
     logger.info(f"Processing message from user {user}: {text[:50]}...")  # Log first 50 chars of message
 
