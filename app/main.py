@@ -1,5 +1,5 @@
 from app.slack_bot import app
-from slack_bolt.adapter.socket_mode import SocketModeHandler
+from slack_bolt.adapter.socket_mode import SocketModeHandler # type: ignore
 from app.config import SLACK_APP_TOKEN
 from app.logger import logger
 
